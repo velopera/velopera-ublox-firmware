@@ -23,7 +23,11 @@ static int handle_message(struct _library_funcs *funcs, void *can_state, const u
     {
         double speed;
         ret = decode_can_0x12d_ABS_Front_Wheel_Speed(state, &speed);
-        printf("speedy! %g\n", speed);
+        // printf("speedy! %g\n", speed);
+        if (funcs->callbacks.updateSpeed)
+        {
+            funcs->callbacks.updateSpeed(state, speed, 1);
+        }
     }
     break;
 
@@ -31,7 +35,7 @@ static int handle_message(struct _library_funcs *funcs, void *can_state, const u
     {
         uint16_t rpm;
         ret = decode_can_0x120_ECU_Engine_Rpm(state, &rpm);
-        printf("rpm! %d\n", rpm);
+        // printf("rpm! %d\n", rpm);
     }
     break;
 
@@ -39,7 +43,7 @@ static int handle_message(struct _library_funcs *funcs, void *can_state, const u
     {
         uint8_t gear;
         ret = decode_can_0x129_ECU_Gear_Position(state, &gear);
-        printf("gear! %d\n", gear);
+        // printf("gear! %d\n", gear);
     }
     break;
 

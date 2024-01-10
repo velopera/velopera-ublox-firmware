@@ -13,6 +13,13 @@ extern "C"
         dbcc_time_stamp_t; /* Time stamp for message; you decide on units */
 #endif
 
+    struct _callbacks
+    {
+        int (*updateSpeed)(void *can_state, const float newSpeed, char valid);
+        int (*updateRpm)(void *can_state, const float newRpm, char valid);
+        int (*updateGear)(void *can_state, const int newGear, char valid);
+    };
+
     typedef struct _library_funcs
     {
         // unpack a message into the (opaque) state struct for further processing
@@ -31,6 +38,7 @@ extern "C"
 
         /// allocate memory for a state structure
         void *(*alloc_state)();
+        struct _callbacks callbacks;
 
     } library_funcs;
 

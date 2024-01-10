@@ -5,12 +5,12 @@
 class CANDataHandler
 {
 protected:
-  library_funcs funcs;
   void *state;
 
 public:
   CANDataHandler();
   ~CANDataHandler();
+  library_funcs funcs;
 
   virtual int init() = 0;
 

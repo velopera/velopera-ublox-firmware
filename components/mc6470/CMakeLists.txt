@@ -1,0 +1,3 @@
+idf_component_register(SRCS "mc6470.c" "mc6470_accel.c" "mc6470_accel-defs.c"
+                    INCLUDE_DIRS "include"
+                    REQUIRES driver)
