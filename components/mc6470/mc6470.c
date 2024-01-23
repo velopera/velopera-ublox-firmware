@@ -21,6 +21,7 @@
 #include "mc6470.h"
 #include "mc6470_accel.h"
 #include <stdio.h>
+#include "mc6470_mag.h"
 #include <string.h>
 
 #include "freertos/FreeRTOS.h"
@@ -114,7 +115,7 @@ void MC6470_Init(struct MC6470_Dev_t *dev, MC6470_Address_e address)
 {
     i2c_master_init();
     dev->accel_address = address;
-    // dev->mag_address = MC6470_MAG_ADDRESS;
+    dev->mag_address = MC6470_MAG_ADDRESS;
 };
 
 uint32_t MC6470_begin(struct MC6470_Dev_t *dev)
@@ -122,25 +123,25 @@ uint32_t MC6470_begin(struct MC6470_Dev_t *dev)
     MC6470_printf(dev, "[MC6470 Accel] Address: 0x%02X\r\n", dev->accel_address);
     MC6470_printf(dev, "[MC6470 Mag  ] Address: 0x%02X\r\n", dev->mag_address);
     uint32_t result;
-    result = MC6470_Accel_Init(dev);
-    if (result != MC6470_Status_OK)
-        ESP_LOGE("mc6470.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
-    // result |= MC6470_Mag_Init(dev);
-    bool found = false;
-    result = MC6470_Accel_ChipIDs(dev, &found);
-    if (!MC6470_IS_ERROR(result))
-    {
-        result = MC6470_Accel_get_Range_and_Resolution(dev, NULL, NULL);
-        if (result != MC6470_Status_OK)
-            ESP_LOGE("mc6470.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
-        result = MC6470_Accel_set_Range_and_Resolution(dev, MC6470_ACCEL_OUTCFG_RANGE_8G, MC6470_ACCEL_OUTCFG_RES_14_Bits);
-        if (result != MC6470_Status_OK)
-            ESP_LOGE("mc6470.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
-    }
-
-    result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Wake);
-    if (result != MC6470_Status_OK)
-        ESP_LOGE("mc6470.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+    // result = MC6470_Accel_Init(dev);
+    // if (result != MC6470_Status_OK)
+    //     ESP_LOGE("mc6470.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+    result = MC6470_Mag_Init(dev);
+    // bool found = false;
+    // result = MC6470_Accel_ChipIDs(dev, &found);
+    // if (!MC6470_IS_ERROR(result))
+    //{
+    //     result = MC6470_Accel_get_Range_and_Resolution(dev, NULL, NULL);
+    //     if (result != MC6470_Status_OK)
+    //         ESP_LOGE("mc6470.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+    //     result = MC6470_Accel_set_Range_and_Resolution(dev, MC6470_ACCEL_OUTCFG_RANGE_8G, MC6470_ACCEL_OUTCFG_RES_14_Bits);
+    //     if (result != MC6470_Status_OK)
+    //         ESP_LOGE("mc6470.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+    // }
+    //
+    // result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Wake);
+    // if (result != MC6470_Status_OK)
+    //    ESP_LOGE("mc6470.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
     return result;
 };
 
@@ -159,10 +160,11 @@ uint32_t MC6470_getData(struct MC6470_Dev_t *dev, MC6470_MagReading *mag_data, M
     uint32_t result = 0;
     if (mag_data != NULL)
     {
+        result |= MC6470_Mag_getData(dev, &mag_data->x, &mag_data->y, &mag_data->z);
     }
     if (accel_data != NULL)
     {
-        result |= MC6470_Accel_getData(dev, &accel_data->x, &accel_data->y, &accel_data->z);
+        // result |= MC6470_Accel_getData(dev, &accel_data->x, &accel_data->y, &accel_data->z);
     }
 
     return result;

@@ -95,7 +95,7 @@ int updateSpeed(void *can_state, const float newSpeed, char valid)
     {
         MC6470_getData(compass, &magData, &accData);
         // ESP_LOGI("COMPASS", "(x, y, z) (%g, %g, %g)", accData.x, accData.y, accData.z);
-        sprintf(msg, "{\"speed\":%d,\"axis_x\":%g,\"axis_y\":%g,\"axis_z\":%g}\n", (int)newSpeed, accData.x, accData.y, accData.z);
+        sprintf(msg, "{\"speed\":%d,\"mag\":[%d,%d,%d]}\n", (int)newSpeed, (int)magData.x, (int)magData.y, (int)magData.z);
         send_data_to_nrf(msg);
         count = 0;
     }
@@ -149,12 +149,17 @@ extern "C" void app_main(void)
     // send_data_to_nrf("FF\n");
     MC6470_Init(compass, MC6470_ACCEL_ADDRESS_VDD);
     esp_err_t ret = MC6470_begin(compass);
-    if (ret != MC6470_Status_OK)
-    {
-        ESP_LOGE("main", "MC6470_begin ERR %d", ret);
-    }
-
-    //  Install and start TWAI driver
+    // while (1)
+    //{
+    //     MC6470_getData(compass, &magData, &accData);
+    //     ESP_LOGI("COMPASS", "acc(x, y, z) (%g, %g, %g), mag(x, y, z) (%g, %g, %g)", accData.x, accData.y, accData.z, magData.x, magData.y, magData.z);
+    //     if (ret != MC6470_Status_OK)
+    //     {
+    //         ESP_LOGE("main", "MC6470_begin ERR %d", ret);
+    //     }
+    //     vTaskDelay(500 / portTICK_PERIOD_MS);
+    // }
+    //   Install and start TWAI driver
     ESP_ERROR_CHECK(twai_driver_install(&g_config, &t_config, &f_config));
     ESP_LOGI(EXAMPLE_TAG, "Driver installed");
     ESP_ERROR_CHECK(twai_start());

@@ -18,295 +18,295 @@
  *
  */
 
-#include "mc6470_accel.h"
+// #include "mc6470_accel.h"
 
-uint32_t MC6470_Accel_Init(struct MC6470_Dev_t *dev)
-{
-    // RETURN_ERROR_IF_NULL(dev);
-    return MC6470_Status_OK;
-};
+// uint32_t MC6470_Accel_Init(struct MC6470_Dev_t *dev)
+// {
+//     // RETURN_ERROR_IF_NULL(dev);
+//     return MC6470_Status_OK;
+// };
 
-uint32_t MC6470_Accel_ChipIDs(struct MC6470_Dev_t *dev, bool *found)
-{
-    // RETURN_ERROR_IF_NULL(dev);
-    uint8_t PCODE = 0;
-    uint8_t HwId = 0;
-    uint32_t result = MC6470_Accel_I2C_Read(dev, MC6470_ACCEL_PCODE_ADDR, &PCODE, sizeof(PCODE));
-    if (result != MC6470_Status_OK)
-        ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
-    result |= MC6470_Accel_I2C_Read(dev, MC6470_ACCEL_HWID_ADDR, &HwId, sizeof(HwId));
-    if (result != MC6470_Status_OK)
-        ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
-    MC6470_printf(dev, "[MC6470 Accel] PCODE: 0x%02X\r\n", PCODE);
-    MC6470_printf(dev, "[MC6470 Accel] HwId: 0x%02X\r\n", HwId);
-    PCODE = (PCODE & 0xF1); // https://github.com/jcu-eresearch/mCube_mc6470_mcu_driver/blob/d8998104a6445013b7298a5279dd96bbee8c91c3/MC7XXX_MCU_1.0.0/sensor/src/accel/m_drv_mc3xxx.c#L170-L182
-    MC6470_printf(dev, "[MC6470 Accel] PCODE: 0x%02X\r\n", PCODE);
-    *found = (PCODE == MC6470_ACCEL_PCODE_3216) && (HwId == MC6470_ACCEL_HWID_MC3216);
+// uint32_t MC6470_Accel_ChipIDs(struct MC6470_Dev_t *dev, bool *found)
+// {
+//     // RETURN_ERROR_IF_NULL(dev);
+//     uint8_t PCODE = 0;
+//     uint8_t HwId = 0;
+//     uint32_t result = MC6470_Accel_I2C_Read(dev, MC6470_ACCEL_PCODE_ADDR, &PCODE, sizeof(PCODE));
+//     if (result != MC6470_Status_OK)
+//         ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+//     result |= MC6470_Accel_I2C_Read(dev, MC6470_ACCEL_HWID_ADDR, &HwId, sizeof(HwId));
+//     if (result != MC6470_Status_OK)
+//         ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+//     MC6470_printf(dev, "[MC6470 Accel] PCODE: 0x%02X\r\n", PCODE);
+//     MC6470_printf(dev, "[MC6470 Accel] HwId: 0x%02X\r\n", HwId);
+//     PCODE = (PCODE & 0xF1); // https://github.com/jcu-eresearch/mCube_mc6470_mcu_driver/blob/d8998104a6445013b7298a5279dd96bbee8c91c3/MC7XXX_MCU_1.0.0/sensor/src/accel/m_drv_mc3xxx.c#L170-L182
+//     MC6470_printf(dev, "[MC6470 Accel] PCODE: 0x%02X\r\n", PCODE);
+//     *found = (PCODE == MC6470_ACCEL_PCODE_3216) && (HwId == MC6470_ACCEL_HWID_MC3216);
 
-    MC6470_printf(dev, "[MC6470 Accel] Found: %s\r\n", *found ? "True" : "False");
-    // ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
-    return result;
-};
+//     MC6470_printf(dev, "[MC6470 Accel] Found: %s\r\n", *found ? "True" : "False");
+//     // ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+//     return result;
+// };
 
-uint32_t MC6470_Accel_get_Rate(struct MC6470_Dev_t *dev, MC6470_ACCEL_SRTFR_RATE_e *rate)
-{
-    RETURN_ERROR_IF_NULL(dev);
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_SRTFR_ADDR;
-    MC6470_reg_value current = 0;
-    uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
-    MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
-    if (!MC6470_IS_ERROR(result))
-    {
-        *rate = MC6470_ACCEL_SRTFR_RATE_GET(current);
-    }
-    return result;
-};
+// uint32_t MC6470_Accel_get_Rate(struct MC6470_Dev_t *dev, MC6470_ACCEL_SRTFR_RATE_e *rate)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_SRTFR_ADDR;
+//     MC6470_reg_value current = 0;
+//     uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
+//     MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         *rate = MC6470_ACCEL_SRTFR_RATE_GET(current);
+//     }
+//     return result;
+// };
 
-uint32_t MC6470_Accel_set_Rate(struct MC6470_Dev_t *dev, MC6470_ACCEL_SRTFR_RATE_e rate)
-{
-    RETURN_ERROR_IF_NULL(dev);
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_SRTFR_ADDR;
-    MC6470_reg_value current = 0;
-    uint32_t result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Standby);
-    result |= MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
-    MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
-    if (!MC6470_IS_ERROR(result))
-    {
-        current = MC6470_ACCEL_SRTFR_RATE_SET(current, rate);
-        current = MC6470_ACCEL_validate_register_write(reg_addr, current);
-        current = 0x08; // dbg
-        MC6470_printf(dev, "[MC6470 Accel] Reg Write [0x%02X]: 0x%02X\r\n", reg_addr, current);
-        result |= MC6470_Accel_I2C_Write(dev, reg_addr, &current, sizeof(current));
-        result |= MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Wake);
-    };
-    return result;
-};
+// uint32_t MC6470_Accel_set_Rate(struct MC6470_Dev_t *dev, MC6470_ACCEL_SRTFR_RATE_e rate)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_SRTFR_ADDR;
+//     MC6470_reg_value current = 0;
+//     uint32_t result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Standby);
+//     result |= MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
+//     MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         current = MC6470_ACCEL_SRTFR_RATE_SET(current, rate);
+//         current = MC6470_ACCEL_validate_register_write(reg_addr, current);
+//         current = 0x08; // dbg
+//         MC6470_printf(dev, "[MC6470 Accel] Reg Write [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//         result |= MC6470_Accel_I2C_Write(dev, reg_addr, &current, sizeof(current));
+//         result |= MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Wake);
+//     };
+//     return result;
+// };
 
-uint32_t MC6470_Accel_get_Range(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RANGE_e *range)
-{
-    RETURN_ERROR_IF_NULL(dev);
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
-    MC6470_reg_value current = 0;
-    uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
-    MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
-    if (!MC6470_IS_ERROR(result))
-    {
-        if (range != NULL)
-        {
-            *range = MC6470_ACCEL_OUTCFG_RANGE_GET(current);
-        }
-        dev->accel_range = MC6470_ACCEL_OUTCFG_RANGE_GET(current);
-    }
-    return result;
-};
+// uint32_t MC6470_Accel_get_Range(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RANGE_e *range)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
+//     MC6470_reg_value current = 0;
+//     uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
+//     MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         if (range != NULL)
+//         {
+//             *range = MC6470_ACCEL_OUTCFG_RANGE_GET(current);
+//         }
+//         dev->accel_range = MC6470_ACCEL_OUTCFG_RANGE_GET(current);
+//     }
+//     return result;
+// };
 
-uint32_t MC6470_Accel_set_Range(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RANGE_e range)
-{
-    RETURN_ERROR_IF_NULL(dev);
+// uint32_t MC6470_Accel_set_Range(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RANGE_e range)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
 
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
-    MC6470_reg_value current = 0;
-    uint32_t result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Standby);
-    result |= MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
-    MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
-    if (!MC6470_IS_ERROR(result))
-    {
-        current = MC6470_ACCEL_OUTCFG_RANGE_SET(current, range);
-        current = MC6470_ACCEL_validate_register_write(reg_addr, current);
-        current = 0x25; // debug
-        MC6470_printf(dev, "[MC6470 Accel] Reg Write [0x%02X]: 0x%02X\r\n", reg_addr, current);
-        result = MC6470_Accel_I2C_Write(dev, reg_addr, &current, sizeof(current));
-        if (!MC6470_IS_ERROR(result))
-        {
-            dev->accel_range = range;
-        }
-        result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Wake);
-    };
-    return result;
-};
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
+//     MC6470_reg_value current = 0;
+//     uint32_t result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Standby);
+//     result |= MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
+//     MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         current = MC6470_ACCEL_OUTCFG_RANGE_SET(current, range);
+//         current = MC6470_ACCEL_validate_register_write(reg_addr, current);
+//         current = 0x25; // debug
+//         MC6470_printf(dev, "[MC6470 Accel] Reg Write [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//         result = MC6470_Accel_I2C_Write(dev, reg_addr, &current, sizeof(current));
+//         if (!MC6470_IS_ERROR(result))
+//         {
+//             dev->accel_range = range;
+//         }
+//         result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Wake);
+//     };
+//     return result;
+// };
 
-uint32_t MC6470_Accel_get_Resolution(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RES_e *resolution)
-{
-    RETURN_ERROR_IF_NULL(dev);
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
-    MC6470_reg_value current = 0;
-    uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
-    MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
-    if (!MC6470_IS_ERROR(result))
-    {
-        if (resolution != NULL)
-        {
-            *resolution = MC6470_ACCEL_OUTCFG_RES_GET(current);
-        }
-        dev->accel_resolution = MC6470_ACCEL_OUTCFG_RES_GET(current);
-    }
-    return result;
-};
+// uint32_t MC6470_Accel_get_Resolution(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RES_e *resolution)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
+//     MC6470_reg_value current = 0;
+//     uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
+//     MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         if (resolution != NULL)
+//         {
+//             *resolution = MC6470_ACCEL_OUTCFG_RES_GET(current);
+//         }
+//         dev->accel_resolution = MC6470_ACCEL_OUTCFG_RES_GET(current);
+//     }
+//     return result;
+// };
 
-uint32_t MC6470_Accel_set_Resolution(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RES_e resolution)
-{
-    RETURN_ERROR_IF_NULL(dev);
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
-    MC6470_reg_value current = 0;
-    uint32_t result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Standby);
-    result |= MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
-    MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
-    if (!MC6470_IS_ERROR(result))
-    {
-        current = MC6470_ACCEL_OUTCFG_RES_SET(current, resolution);
-        current = MC6470_ACCEL_validate_register_write(reg_addr, current);
-        current = 0x25; // dbg
-        MC6470_printf(dev, "[MC6470 Accel] Reg Write [0x%02X]: 0x%02X\r\n", reg_addr, current);
-        result = MC6470_Accel_I2C_Write(dev, reg_addr, &current, sizeof(current));
-        if (!MC6470_IS_ERROR(result))
-        {
-            dev->accel_resolution = resolution;
-        }
-        result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Wake);
-    };
-    return result;
-};
+// uint32_t MC6470_Accel_set_Resolution(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RES_e resolution)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
+//     MC6470_reg_value current = 0;
+//     uint32_t result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Standby);
+//     result |= MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
+//     MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         current = MC6470_ACCEL_OUTCFG_RES_SET(current, resolution);
+//         current = MC6470_ACCEL_validate_register_write(reg_addr, current);
+//         current = 0x25; // dbg
+//         MC6470_printf(dev, "[MC6470 Accel] Reg Write [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//         result = MC6470_Accel_I2C_Write(dev, reg_addr, &current, sizeof(current));
+//         if (!MC6470_IS_ERROR(result))
+//         {
+//             dev->accel_resolution = resolution;
+//         }
+//         result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Wake);
+//     };
+//     return result;
+// };
 
-uint32_t MC6470_Accel_get_Range_and_Resolution(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RANGE_e *range, MC6470_ACCEL_OUTCFG_RES_e *resolution)
-{
-    RETURN_ERROR_IF_NULL(dev);
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
-    MC6470_reg_value current = 0;
-    uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
-    if (result != MC6470_Status_OK)
-        ESP_LOGE("mc6470.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
-    MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
-    if (!MC6470_IS_ERROR(result))
-    {
-        if (resolution != NULL)
-        {
-            *resolution = MC6470_ACCEL_OUTCFG_RES_GET(current);
-        }
-        dev->accel_resolution = MC6470_ACCEL_OUTCFG_RES_GET(current);
-        if (range != NULL)
-        {
-            *range = MC6470_ACCEL_OUTCFG_RANGE_GET(current);
-        }
-        dev->accel_range = MC6470_ACCEL_OUTCFG_RANGE_GET(current);
-    }
-    return result;
-};
+// uint32_t MC6470_Accel_get_Range_and_Resolution(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RANGE_e *range, MC6470_ACCEL_OUTCFG_RES_e *resolution)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
+//     MC6470_reg_value current = 0;
+//     uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
+//     if (result != MC6470_Status_OK)
+//         ESP_LOGE("mc6470.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+//     MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         if (resolution != NULL)
+//         {
+//             *resolution = MC6470_ACCEL_OUTCFG_RES_GET(current);
+//         }
+//         dev->accel_resolution = MC6470_ACCEL_OUTCFG_RES_GET(current);
+//         if (range != NULL)
+//         {
+//             *range = MC6470_ACCEL_OUTCFG_RANGE_GET(current);
+//         }
+//         dev->accel_range = MC6470_ACCEL_OUTCFG_RANGE_GET(current);
+//     }
+//     return result;
+// };
 
-uint32_t MC6470_Accel_set_Range_and_Resolution(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RANGE_e range, MC6470_ACCEL_OUTCFG_RES_e resolution)
-{
-    RETURN_ERROR_IF_NULL(dev);
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
-    MC6470_reg_value current = 0;
-    uint32_t result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Standby);
-    current = MC6470_ACCEL_OUTCFG_RANGE_SET(current, range);
-    current = MC6470_ACCEL_OUTCFG_RES_SET(current, resolution);
-    current = MC6470_ACCEL_validate_register_write(reg_addr, current);
-    current = 0x25; // dbg
-    MC6470_printf(dev, "[MC6470 Accel] Reg Write [0x%02X]: 0x%02X\r\n", reg_addr, current);
-    result |= MC6470_Accel_I2C_Write(dev, reg_addr, &current, sizeof(current));
-    if (result != MC6470_Status_OK)
-        ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+// uint32_t MC6470_Accel_set_Range_and_Resolution(struct MC6470_Dev_t *dev, MC6470_ACCEL_OUTCFG_RANGE_e range, MC6470_ACCEL_OUTCFG_RES_e resolution)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_OUTCFG_ADDR;
+//     MC6470_reg_value current = 0;
+//     uint32_t result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Standby);
+//     current = MC6470_ACCEL_OUTCFG_RANGE_SET(current, range);
+//     current = MC6470_ACCEL_OUTCFG_RES_SET(current, resolution);
+//     current = MC6470_ACCEL_validate_register_write(reg_addr, current);
+//     current = 0x25; // dbg
+//     MC6470_printf(dev, "[MC6470 Accel] Reg Write [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//     result |= MC6470_Accel_I2C_Write(dev, reg_addr, &current, sizeof(current));
+//     if (result != MC6470_Status_OK)
+//         ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
 
-    if (!MC6470_IS_ERROR(result))
-    {
-        dev->accel_range = range;
-        dev->accel_resolution = resolution;
-    }
-    result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Wake);
-    if (result != MC6470_Status_OK)
-        ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
-    return result;
-};
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         dev->accel_range = range;
+//         dev->accel_resolution = resolution;
+//     }
+//     result = MC6470_Accel_set_OperationState(dev, MC6470_ACCEL_MODE_OPCON_Wake);
+//     if (result != MC6470_Status_OK)
+//         ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+//     return result;
+// };
 
-uint32_t MC6470_Accel_set_OperationState(struct MC6470_Dev_t *dev, MC6470_ACCEL_MODE_OPCON_e state)
-{
-    RETURN_ERROR_IF_NULL(dev);
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_MODE_ADDR;
-    MC6470_reg_value current = 0;
-    uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
-    if (result != MC6470_Status_OK)
-        ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
-    MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
-    if (!MC6470_IS_ERROR(result))
-    {
-        current = MC6470_ACCEL_MODE_OPCON_SET(current, state);
-        current = MC6470_ACCEL_validate_register_write(reg_addr, current);
-        MC6470_printf(dev, "[MC6470 Accel] Reg Write [0x%02X]: 0x%02X, State: %i\r\n", reg_addr, current, state);
-        result = MC6470_Accel_I2C_Write(dev, reg_addr, &current, sizeof(current));
-        if (result != MC6470_Status_OK)
-            ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
-        if (state == MC6470_ACCEL_MODE_OPCON_Wake)
-        {
-            MC6470_delay_us(20);
-        }
+// uint32_t MC6470_Accel_set_OperationState(struct MC6470_Dev_t *dev, MC6470_ACCEL_MODE_OPCON_e state)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_MODE_ADDR;
+//     MC6470_reg_value current = 0;
+//     uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
+//     if (result != MC6470_Status_OK)
+//         ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+//     MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         current = MC6470_ACCEL_MODE_OPCON_SET(current, state);
+//         current = MC6470_ACCEL_validate_register_write(reg_addr, current);
+//         MC6470_printf(dev, "[MC6470 Accel] Reg Write [0x%02X]: 0x%02X, State: %i\r\n", reg_addr, current, state);
+//         result = MC6470_Accel_I2C_Write(dev, reg_addr, &current, sizeof(current));
+//         if (result != MC6470_Status_OK)
+//             ESP_LOGE("mc6470_accel.c", "ERROR AT LINE %d WITH NO %ld", __LINE__, result);
+//         if (state == MC6470_ACCEL_MODE_OPCON_Wake)
+//         {
+//             MC6470_delay_us(20);
+//         }
 
-        reg_addr = MC6470_ACCEL_OPSTAT_ADDR;
-        MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
-        MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
-    };
-    return result;
-};
+//         reg_addr = MC6470_ACCEL_OPSTAT_ADDR;
+//         MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
+//         MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X\r\n", reg_addr, current);
+//     };
+//     return result;
+// };
 
-uint32_t MC6470_Accel_hasData(struct MC6470_Dev_t *dev, bool *has_data)
-{
-    RETURN_ERROR_IF_NULL(dev);
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_SR_ADDR;
-    uint32_t result = 0;
-    uint8_t current = 0;
+// uint32_t MC6470_Accel_hasData(struct MC6470_Dev_t *dev, bool *has_data)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_SR_ADDR;
+//     uint32_t result = 0;
+//     uint8_t current = 0;
 
-    result |= MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
-    int v = MC6470_ACCEL_SR_ACQ_INT_GET(current);
-    MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X Value: %i\r\n", reg_addr, current, v);
-    if (!MC6470_IS_ERROR(result))
-    {
-        // MC6470_printf(dev, "dbg line %d %d \r\n", __LINE__, v);
-        *has_data = v;
-    }
-    else
-    {
-        MC6470_printf(dev, "dbg line %d \r\n", __LINE__);
+//     result |= MC6470_Accel_I2C_Read(dev, reg_addr, &current, sizeof(current));
+//     int v = MC6470_ACCEL_SR_ACQ_INT_GET(current);
+//     // MC6470_printf(dev, "[MC6470 Accel] Reg Read [0x%02X]: 0x%02X Value: %i\r\n", reg_addr, current, v);
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         // MC6470_printf(dev, "dbg line %d %d \r\n", __LINE__, v);
+//         *has_data = v;
+//     }
+//     else
+//     {
+//         MC6470_printf(dev, "dbg line %d \r\n", __LINE__);
 
-        *has_data = false;
-    }
-    return result;
-};
+//         *has_data = false;
+//     }
+//     return result;
+// };
 
-uint32_t MC6470_Accel_getData(struct MC6470_Dev_t *dev, float *x, float *y, float *z)
-{
-    RETURN_ERROR_IF_NULL(dev);
-    MC6470_reg_addr reg_addr = MC6470_ACCEL_XOUT_EX_L_ADDR;
-    uint8_t data[6] = {0};
-    uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, data, sizeof(data));
-    bool has_data = false;
-    short _x = 0;
-    short _y = 0;
-    short _z = 0;
-    while (!has_data)
-    {
-        MC6470_Accel_hasData(dev, &has_data);
-        MC6470_delay_ms(1000);
-    }
-    if (!MC6470_IS_ERROR(result))
-    {
-        _x = data[0] | (data[1] << 8);
-        _y = data[2] | (data[3] << 8);
-        _z = data[4] | (data[5] << 8);
+// uint32_t MC6470_Accel_getData(struct MC6470_Dev_t *dev, float *x, float *y, float *z)
+// {
+//     RETURN_ERROR_IF_NULL(dev);
+//     MC6470_reg_addr reg_addr = MC6470_ACCEL_XOUT_EX_L_ADDR;
+//     uint8_t data[6] = {0};
+//     uint32_t result = MC6470_Accel_I2C_Read(dev, reg_addr, data, sizeof(data));
+//     bool has_data = false;
+//     short _x = 0;
+//     short _y = 0;
+//     short _z = 0;
+//     while (!has_data)
+//     {
+//         MC6470_Accel_hasData(dev, &has_data);
+//         // MC6470_delay_ms(500);
+//     }
+//     if (!MC6470_IS_ERROR(result))
+//     {
+//         _x = data[0] | (data[1] << 8);
+//         _y = data[2] | (data[3] << 8);
+//         _z = data[4] | (data[5] << 8);
 
-        *x = (float)_x;
-        *y = (float)_y;
-        *z = (float)_z;
-    }
-    return result;
-};
+//         *x = (float)_x;
+//         *y = (float)_y;
+//         *z = (float)_z;
+//     }
+//     return result;
+// };
 
-uint32_t MC6470_Accel_I2C_Write(struct MC6470_Dev_t *dev, MC6470_reg_addr reg_address, uint8_t *buffer, size_t buffer_length)
-{
-    // RETURN_ERROR_IF_NULL(dev);
-    return MC6470_I2C_Write(dev, dev->accel_address, reg_address, buffer, buffer_length);
-};
+// uint32_t MC6470_Accel_I2C_Write(struct MC6470_Dev_t *dev, MC6470_reg_addr reg_address, uint8_t *buffer, size_t buffer_length)
+// {
+//     // RETURN_ERROR_IF_NULL(dev);
+//     return MC6470_I2C_Write(dev, dev->accel_address, reg_address, buffer, buffer_length);
+// };
 
-uint32_t MC6470_Accel_I2C_Read(struct MC6470_Dev_t *dev, MC6470_reg_addr reg_address, uint8_t *buffer, size_t buffer_length)
-{
-    // RETURN_ERROR_IF_NULL(dev);
-    return MC6470_I2C_Read(dev, dev->accel_address, reg_address, buffer, buffer_length);
-};
+// uint32_t MC6470_Accel_I2C_Read(struct MC6470_Dev_t *dev, MC6470_reg_addr reg_address, uint8_t *buffer, size_t buffer_length)
+// {
+//     // RETURN_ERROR_IF_NULL(dev);
+//     return MC6470_I2C_Read(dev, dev->accel_address, reg_address, buffer, buffer_length);
+// };
