@@ -22,7 +22,6 @@
 #include "esp_err.h"
 #include "driver/twai.h"
 #include "can_data_handler.h"
-#include "ktm-a612.h"
 #include "mc6470.h"
 /* --------------------- Definitions and static variables ------------------ */
 // Example Configuration
@@ -39,7 +38,7 @@ static const int RX_BUF_SIZE = 1024;
 
 static const twai_filter_config_t f_config = TWAI_FILTER_CONFIG_ACCEPT_ALL();
 static const twai_timing_config_t t_config = TWAI_TIMING_CONFIG_500KBITS();
-// can_obj_ktm_a612_h_t ktm_a612;
+
 //  Set TX queue length to 0 due to listen only mode
 static const twai_general_config_t g_config = {.mode = TWAI_MODE_LISTEN_ONLY,
                                                .tx_io = TX_GPIO_NUM,
@@ -72,7 +71,7 @@ MC6470_AccelReading accData;
 
 static SemaphoreHandle_t rx_sem;
 
-CANDataHandler *pja612_handler = new CANPJA612();
+CANDataHandler *velopera_handler = new CANVELOPERA();
 
 /* --------------------------- Tasks and Functions -------------------------- */
 int count = 0;
@@ -108,8 +107,8 @@ static void twai_receive_task(void *arg)
     xSemaphoreTake(rx_sem, portMAX_DELAY);
 
     // dbcc_time_stamp_t time_stamp = 0;
-    pja612_handler->init();
-    pja612_handler->funcs.callbacks.updateSpeed = updateSpeed;
+    velopera_handler->init();
+    velopera_handler->funcs.callbacks.updateSpeed = updateSpeed;
     while (1)
     {
         twai_message_t rx_msg;
@@ -128,7 +127,7 @@ static void twai_receive_task(void *arg)
 
         // printf("uint64_t raw_data %llu \n\r", (*(uint64_t *)rx_msg.data));
 
-        pja612_handler->handleCANData(rx_msg.identifier, (*(uint64_t *)rx_msg.data));
+        velopera_handler->handleCANData(rx_msg.identifier, (*(uint64_t *)rx_msg.data));
     }
 
     xSemaphoreGive(rx_sem);

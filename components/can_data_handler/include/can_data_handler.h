@@ -24,9 +24,3 @@ public:
   int init();
 };
 
-class CANPJA612 : public CANDataHandler
-{
-public:
-  CANDataHandler::CANDataHandler;
-  int init();
-};

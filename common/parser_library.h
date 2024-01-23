@@ -44,7 +44,6 @@ extern "C"
 
     typedef void (*lib_init_func)(library_funcs *);
 
-    extern void lib_init_pja612(library_funcs *);
     extern void lib_init_velopera(library_funcs *);
 
     /** the (at least) one exported function by the library, passing out the
