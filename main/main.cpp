@@ -61,17 +61,10 @@ const uart_config_t uart_config = {
 struct MC6470_Dev_t *compass;
 MC6470_MagReading magData;
 MC6470_AccelReading accData;
-// struct MC6470_Dev_t compass = {
-//    .ctx = NULL,
-//    .accel_address = MC6470_ACCEL_ADDRESS_7_BITS_1,
-//    .mag_address = MC6470_MAG_ADDRESS,
-//    .accel_resolution = MC6470_ACCEL_OUTCFG_RES_8_Bits,
-//    .accel_range = MC6470_ACCEL_OUTCFG_RANGE_16G,
-//};
 
 static SemaphoreHandle_t rx_sem;
 
-CANDataHandler *velopera_handler = new CANVELOPERA();
+CANDataHandler *velopera_handler = new CANVelopera();
 
 /* --------------------------- Tasks and Functions -------------------------- */
 int count = 0;
