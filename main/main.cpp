@@ -71,7 +71,7 @@ MC6470_AccelReading accData;
 
 static SemaphoreHandle_t rx_sem;
 
-CANDataHandler *velopera_handler = new CANVELOPERA();
+CANDataHandler *velopera_handler = new CANVelopera();
 
 /* --------------------------- Tasks and Functions -------------------------- */
 int count = 0;
