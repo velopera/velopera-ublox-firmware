@@ -279,7 +279,7 @@ extern "C" void app_main(void)
             printf("Humidity %s\n", humidity);
             printf("Pressure %s\n", pressure);
 
-            sprintf(msg, "{\"speed\":%d,\"gear\":%d,\"aku_voltage\":%d,\"temperature\":%.2f,\"humidity\":%.2f,\"compass\":[%d,%d,%d]}",
+            sprintf(msg, "{\"speed\":%d,\"gear\":%d,\"aku_voltage\":%d,\"temperature\":%.2f,\"humidity\":%.2f,\"compass\":[%d,%d,%d]}\n",
                     (int)newSpeed, 0, 0, temp, hum, (int)magData.x, (int)magData.y, (int)magData.z);
             printf("printed %s \r\n", msg);
             send_data_to_nrf(msg);
@@ -288,7 +288,7 @@ extern "C" void app_main(void)
         {
             ESP_LOGE(TAG_BME280, "measure error. code: %d", com_rslt);
         }
-        vTaskDelay(500 / portTICK_PERIOD_MS);
+        vTaskDelay(5000 / portTICK_PERIOD_MS);
     }
     // Install and start TWAI driver
     ESP_ERROR_CHECK(twai_driver_install(&g_config, &t_config, &f_config));
