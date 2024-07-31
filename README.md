@@ -21,14 +21,14 @@ After installing the required development environment and downloading the exampl
   4. Click the “ESP-IDF Build, Flash and Monitor” button on the “Status Bar”.
 
 
-
+## Project Description
  
 The velopera-ublox-firmware is based on one main application and four components that do their corresponding job. The following diagram visualises the relationship between components and main application.
 
 ![image](https://github.com/user-attachments/assets/e5638d00-f2a3-4643-9346-daa324d37806)
 
 
-## CAN Interface
+### CAN Interface
 
 CAN interface based on “can_velopera” and “can_data_handler” components. The “can_data_handler” component is an abstract class which abstracts CAN data handling processes between main application and CAN data handlers of different types of bikes. In this example “can_data_handler” component abstracts “can_velopera” CAN data handler.
 
@@ -36,7 +36,7 @@ The “can_velopera” CAN data handler, handles the filtering process of Velope
 
 In this example Two Wire Automotive Interface (TWAI) API of Espressif used to implement the CAN data transmission.
 
-## I2C Interface
+### I2C Interface
 
 In this example I2C interface communicates with the mc6470 magnetometer sensor. The I2C driver API of Espressif used to implement the communication process with the mc6470 magnetometer sensor. 
 
@@ -49,7 +49,7 @@ The example project uses INT-COM pins of the board to communicate with the nRF91
 
 In this example UART driver API of Espressif used to implement the UART application.
 
-## GATT Server
+### GATT Server
 
 The example project provides a GATT Server advertisement feature. The “gatts” component handles the implementation of the GATT Server. The GATT Server advertises the bike name (Velopera).
 
@@ -59,5 +59,20 @@ The following sequence diagram visualises the most significant chain of events d
 
 ![image](https://github.com/user-attachments/assets/efd807e0-f28d-4801-8b2e-a3e1c65aa25c)
 
+
+## Testing
+
+After programming the example project to the uBlox Nina module, click the “ESP-IDF Monitor Device” button on the status bar to open the serial monitor to see the debug output of the example project.
+
+## Useful Links
+
+#### Espressif IDF documentation
+https://idf.espressif.com/
+#### uBlox Nina W10x Module page 
+https://www.u-blox.com/en/product/nina-w10-series-open-cpu
+#### System integration manual - chapter 2.5
+https://content.u-blox.com/sites/default/files/NINA-W1_SIM_UBX-17005730.pdf
+#### ESP ultimate guide documentation
+https://www.espressif.com/sites/default/files/documentation/ESP32-C3WirelessAdventure.pdf
 
 
