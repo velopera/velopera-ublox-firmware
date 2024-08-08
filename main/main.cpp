@@ -247,6 +247,7 @@ extern "C" void app_main(void)
     com_rslt += bme280_set_filter(BME280_FILTER_COEFF_16);
     com_rslt += bme280_set_power_mode(BME280_NORMAL_MODE);
     int newSpeed = 0;
+    int meas_id = 0;
     while (1)
     {
         char msg[128];
@@ -279,10 +280,11 @@ extern "C" void app_main(void)
             printf("Humidity %s\n", humidity);
             printf("Pressure %s\n", pressure);
 
-            sprintf(msg, "{\"speed\":%d,\"gear\":%d,\"aku_voltage\":%d,\"temperature\":%.2f,\"humidity\":%.2f,\"compass\":[%d,%d,%d]}\n",
-                    (int)newSpeed, 0, 0, temp, hum, (int)magData.x, (int)magData.y, (int)magData.z);
+            sprintf(msg, "{\"speed\":%d,\"gear\":%d,\"aku_voltage\":%d,\"temperature\":%.2f,\"humidity\":%.2f,\"compass\":[%d,%d,%d],\"measId\":%d}\n",
+                    (int)newSpeed, 0, 0, temp, hum, (int)magData.x, (int)magData.y, (int)magData.z, meas_id);
             printf("printed %s \r\n", msg);
             send_data_to_nrf(msg);
+            meas_id++;
         }
         else
         {
