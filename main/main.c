@@ -118,8 +118,7 @@ twai_receive_task(void* arg)
   vTaskDelete(NULL);
 }
 
-void
-app_main(void)
+void main(void)
 {
   rx_sem = xSemaphoreCreateBinary();
   gatts_init();
