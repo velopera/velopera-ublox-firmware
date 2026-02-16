@@ -76,3 +76,6 @@ https://content.u-blox.com/sites/default/files/NINA-W1_SIM_UBX-17005730.pdf
 https://www.espressif.com/sites/default/files/documentation/ESP32-C3WirelessAdventure.pdf
 
 
+---
+
+*This work has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No. 101070599 (SecOPERA)*
